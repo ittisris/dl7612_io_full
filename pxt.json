@@ -1,0 +1,21 @@
+{
+    "name": "dl7612_io_full",
+    "description": "",
+    "dependencies": {
+        "core": "*",
+        "radio": "*",
+        "cayenne_lpp": "github:ittisris/pxt-cayenne_lpp#45e9445f194e2400bbd0df9949755591f9c20f31"
+    },
+    "files": [
+        "main.blocks",
+        "main.ts",
+        "README.md"
+    ],
+    "testFiles": [
+        "test.ts"
+    ],
+    "supportedTargets": [
+        "microbit"
+    ],
+    "preferredEditor": "blocksprj"
+}
