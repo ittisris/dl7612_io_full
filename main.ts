@@ -4,13 +4,7 @@ function resetModule () {
         serial.writeLine("AT")
         basic.pause(1000)
         serial.writeLine("AT+NRB")
-        basic.showLeds(`
-            . . . . .
-            . # . # .
-            . . # . .
-            . # . # .
-            . . . . .
-            `)
+        basic.showIcon(IconNames.No)
     }
     basic.pause(2000)
     basic.clearScreen()
