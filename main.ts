@@ -58,6 +58,7 @@ serial.setWriteLinePadding(0)
 serial.setRxBufferSize(64)
 let dwellTime = 10000
 let maxDelay = 120000
+let vRef = 1.236
 lastupdated = input.runningTime()
 basic.forever(function () {
     if (input.runningTime() > lastupdated + maxDelay) {
@@ -74,7 +75,7 @@ basic.forever(function () {
             . . # # #
             # # # # #
             `).scrollImage(1, 100)
-        vBat = 1.236 / pins.map(
+        vBat = vRef / pins.map(
         pins.analogReadPin(AnalogPin.P1),
         0,
         1023,
