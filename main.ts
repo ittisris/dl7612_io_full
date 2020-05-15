@@ -5,9 +5,18 @@ function resetModule () {
         basic.pause(1000)
         serial.writeLine("AT+NRB")
         basic.showIcon(IconNames.No)
+    } else {
+        images.createImage(`
+            . . . . #
+            . . . . #
+            . . . # #
+            . . # # #
+            # # # # #
+            `).scrollImage(1, 100)
     }
-    basic.pause(2000)
+    basic.pause(200)
     basic.clearScreen()
+    basic.pause(2000)
 }
 serial.onDataReceived(serial.delimiters(Delimiters.NewLine), function () {
     rx = serial.readLine()
@@ -22,24 +31,21 @@ serial.onDataReceived(serial.delimiters(Delimiters.NewLine), function () {
         } else {
             rxPayload = cayenneLPP.extractPayloadStr(rx, "+CGATT:", "")
             if (rxPayload.length > 0) {
-                connected = true
                 basic.showIcon(IconNames.Yes)
-                basic.pause(1000)
+                basic.pause(500)
                 basic.clearScreen()
+                connected = true
             }
         }
     }
 })
 let txPayload = ""
 let vBat = 0
-let rx = ""
-let rxPayload: string[] = []
 let connected = false
+let rxPayload: string[] = []
+let rx = ""
 let lastupdated = 0
-led.setBrightness(10)
-lastupdated = input.runningTime()
-connected = false
-rxPayload = []
+led.setBrightness(20)
 pins.digitalWritePin(DigitalPin.P0, 0)
 cayenneLPP.add_digital(LPP_Direction.Output_Port, DigitalPin.P0)
 cayenneLPP.add_sensor(LPP_Bit_Sensor.Temperature)
@@ -50,14 +56,24 @@ BaudRate.BaudRate115200
 )
 serial.setWriteLinePadding(0)
 serial.setRxBufferSize(64)
+let dwellTime = 10000
+let maxDelay = 120000
+lastupdated = input.runningTime()
 basic.forever(function () {
-    if (input.runningTime() > lastupdated + 120000) {
+    if (input.runningTime() > lastupdated + maxDelay) {
         connected = false
     }
     if (!(connected)) {
         resetModule()
     } else {
         serial.writeLine("AT")
+        images.createImage(`
+            . . . . #
+            . . . . #
+            . . . # #
+            . . # # #
+            # # # # #
+            `).scrollImage(1, 100)
         vBat = 1.236 / pins.map(
         pins.analogReadPin(AnalogPin.P1),
         0,
@@ -71,6 +87,7 @@ basic.forever(function () {
         vBat
         )
         serial.writeLine("AT+NMGS=" + convertToText(txPayload.length / 2) + "," + txPayload)
-        basic.pause(10000)
+        basic.clearScreen()
+        basic.pause(dwellTime)
     }
 })
